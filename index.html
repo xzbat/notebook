@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>3-5</title>
+		<script src="node_modules/jquery/dist/jquery.js"></script>
+		<script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+		<style>
+			.del{text-decoration: line-through;color: #DC143C;}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<nav class="navbar navbar-inverse">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="#">
+							ToDoList
+						</a>
+					</div>
+				</div>
+			</nav>
+			<div class="container">
+				<div class="row">
+					<div class="col-md-8 col-md-offset-2">
+						<div class="panel panel-warning">
+							<div class="panel-heading">
+								<h3 class="text-dager">还有{{count}}项待办</h3>
+								<input type="text" class="form-control" v-model="title" @keyup.13="add"/>
+							</div>
+							<div class="panel-body">
+								<ul class="list-group">
+									<!--如果当前双击的li的todo与循环出来的某一项相等，就显示输入框-->
+									<li class="list-group-item" v-for="(todo,index) in filterTodos" @dblclick="remember(todo)">
+										<span :class="{del:todo.isSelected}" v-show="cur!=todo">
+										<input type="checkbox" v-model="todo.isSelected"/>{{todo.title}}	
+										</span>
+										<input type="text" v-model="todo.title" v-show="cur==todo" @keyup.enter="cancel" @blur="cancel" v-focus="cur==todo">
+										<button class="pull-right btn btn-danger btn-xs" @click="remove(todo)">#</button>
+									</li>
+								</ul>
+							</div>
+							<div class="panel-footer">
+								<ul class="nav nav-pills">
+									<!--hush值就是在路径后加的#命令(# / 自定义命令名)-->
+									<li role="presentation" :class="{active:hash==='all'}"><a href="#/all">全部完成</a></li>
+									<li role="presentation" :class="{active:hash==='finish'}"><a href="#/finish">已完成</a></li>
+									<li role="presentation" :class="{active:hash==='unfinish'}"><a href="#/unfinish">未完成</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+<!--实现单页开发的方式：浏览器自带的历史管理的方法history.go (history.pushState()可能会导致404错误)2）通过hash记录跳转的路径(可以产生历史管理)-->
+<!--开发hash上线history,hash值记录单页面状态-->
+		<script src="node_modules/vue/dist/vue.js"></script>
+		<script src="node_modules/axios/dist/axios.js"></script>
+		<script src="js/todo.js"></script>
+	</body>
+	</html>
